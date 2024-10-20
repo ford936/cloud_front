@@ -1,0 +1,29 @@
+.work_space {
+    display: flex;
+    /* margin-right: 200px; */
+    width: 80vw;
+    border: 7px rgb(36, 187, 247) solid;
+    min-height: 85vh;
+    background-color: #e7f5ff;
+}
+
+.work_space_files_title {
+    display: block;
+    padding-bottom: 1vh;
+    width: 100%;
+}
+
+.work_menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    padding-left: 20%;
+    font-size: 25px;
+    width: 12vh;
+    height: 12vh;
+}
+
+.main {
+    padding-top: 25px;
+    justify-content: left;
+}
