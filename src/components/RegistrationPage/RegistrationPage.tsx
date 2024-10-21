@@ -1,18 +1,23 @@
 import { useState } from "react"
 import { RegistrationForm } from "./type"
+import {useNavigate} from 'react-router-dom'
 import './RegistrationPage.css'
 
 export default function RegistrationPage() {
 
     const [form, setForm] = useState<RegistrationForm>({
         email: '',
-        login: '',
+        username: '',
         password: ''
-
     })
+
+    const navigate = useNavigate();
+
     const [validationEmail, setValidationEmail] = useState('');
     const [validationLogin, setValidationLogin] = useState('');
     const [validationPassword, setValidationPassword] = useState('');
+
+    
 
     function handleInputChange(element: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = element.target
@@ -31,7 +36,7 @@ export default function RegistrationPage() {
             }
         }
 
-        if (name == 'login') {
+        if (name == 'username') {
             const isValid = /^[a-zA-Z][a-zA-Z0-9]{3,19}$/.test(value);
             if (isValid) {
                 setValidationLogin('');
@@ -49,11 +54,29 @@ export default function RegistrationPage() {
         }        
     }}
 
+    async function handleSubmit(element: React.FormEvent<HTMLFormElement>) {
+        element.preventDefault()
+        let response = await fetch('http://127.0.0.1:8000/api/v1/user/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(form)
+          });
+        if (response.ok) {
+            let result = await response.json();
+            localStorage.setItem('token', result.access)
+            return navigate("/");
+        }
+        else {
+            alert("Не корректные данные для регистрации");
+        }}
+
   return (
     <>
         <div className='registration_panel'>
             <h1 className='title'>REGISTRATION</h1>
-            <form className='registration'>
+            <form className='registration' onSubmit={handleSubmit}>
                 <div className='email_block'>
                 <label htmlFor='email'>Email:</label>
                 <input type="email" id='email' className='email' name='email' value={form.email} onChange={handleInputChange}/>
@@ -61,7 +84,7 @@ export default function RegistrationPage() {
                 </div>
                 <div className='login_block'>
                 <label htmlFor='login'>Login:</label>
-                <input type="login" id='login' className='login' name='login' value={form.login} onChange={handleInputChange}/>
+                <input type="login" id='username' className='login' name='username' value={form.username} onChange={handleInputChange}/>
                 {validationLogin && <p className="error_login">{validationLogin}</p>}
                 </div>
                 <div className='password_block'>

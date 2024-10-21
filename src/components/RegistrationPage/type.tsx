@@ -1,5 +1,5 @@
 export interface RegistrationForm {
     email: string
-    login: string
+    username: string
     password: string
 }

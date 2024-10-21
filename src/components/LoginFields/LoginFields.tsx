@@ -1,15 +1,17 @@
 import './LoginFileds.css'
 import { useState } from 'react'
 import { AuthForm } from './type'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function LoginFields() {
     const [form, setForm] = useState<AuthForm>({
-        login: '',
+        username: '',
         password: ''
     })
     const [validationLogin, setValidationLogin] = useState('');
     const [validationPassword, setValidationPassword] = useState('');
+
+    const navigate = useNavigate();
 
     function handleInputChange(element: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = element.target
@@ -19,7 +21,7 @@ export default function LoginFields() {
             [name]: value
         }))
 
-        if (name == 'login') {
+        if (name == 'username') {
             const isValid = /^[a-zA-Z][a-zA-Z0-9]{3,19}$/.test(value);
             if (isValid) {
                 setValidationLogin('');
@@ -39,14 +41,21 @@ export default function LoginFields() {
 
     async function handleSubmit(element: React.FormEvent<HTMLFormElement>) {
         element.preventDefault()
-        let response = await fetch('/test/', {
+        let response = await fetch('http://127.0.0.1:8000/api/token/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify(form)
           });
-    }
+        if (response.ok) {
+            let result = await response.json();
+            localStorage.setItem('token', result.access)
+            return navigate("/cloud");
+        }
+        else {
+            alert("Не верные данные для аторизации");
+        }}
     
   return (
     <>
@@ -57,7 +66,7 @@ export default function LoginFields() {
             <form className='auth' onSubmit={handleSubmit}>
                 <div className='login_block'>
                 <label htmlFor='login'>Login</label>
-                <input type="login" id='login' className='login' name='login' value={form.login} onChange={handleInputChange}/>
+                <input type="login" id='username' className='login' name='username' value={form.username} onChange={handleInputChange}/>
                 {validationLogin && <p className="error_login">{validationLogin}</p>}
                 </div>
                 <div className='password_block'>
@@ -65,7 +74,9 @@ export default function LoginFields() {
                 <input type="password" id='password' className='password' name='password' value={form.password} onChange={handleInputChange}/>
                 {validationPassword && <p className="error_login">{validationPassword}</p>}
                 </div>
-                <Link to={'cloud/'}><button type='submit' className='auth_button'>Log in</button></Link>
+                {/* <Link to={'cloud/'}> */}
+                <button type='submit' className='auth_button'>Log in</button>
+                {/* </Link> */}
                 <Link to={'registration/'}><button className='register_button'>Sign Up</button></Link>
             </form>
         </div>

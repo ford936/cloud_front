@@ -17,13 +17,18 @@
     display: flex;
     flex-direction: column;
     justify-content: right;
-    padding-left: 20%;
+    margin-left: 5%;
     font-size: 25px;
     width: 12vh;
     height: 12vh;
 }
 
+.work_menu_logout_button {
+    height: 40px;
+    width: 100px;
+}
+
 .main {
     padding-top: 25px;
-    justify-content: left;
+    justify-content: center;
 }
