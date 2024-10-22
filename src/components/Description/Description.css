@@ -11,6 +11,11 @@
     border-top: 4px rgb(36, 187, 247) solid;
 }
 
-/* .description_container_share {
-    
-} */
+.description_container_file_name {
+    color: blue;
+}
+
+.description_container_file_name:hover {
+    color: black;
+    text-shadow: 1px 1px 2px blue, 0 0 1em blue, 0 0 0.2em blue;
+}

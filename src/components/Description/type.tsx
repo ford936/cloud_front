@@ -3,10 +3,15 @@ export interface IDescription {
     name: string
     description: string
     size: string
-    unloadDate: string
-    lastLoadDate: string
+    unload_date: string
+    last_load_date: string
+    file?: string
 }
 
 export interface IProps {
     data: IDescription
+}
+
+export interface IPropsList {
+    data: IDescription[]
 }
