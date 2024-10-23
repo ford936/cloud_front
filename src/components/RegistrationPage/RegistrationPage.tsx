@@ -2,6 +2,7 @@ import { useState } from "react"
 import { RegistrationForm } from "./type"
 import {useNavigate} from 'react-router-dom'
 import './RegistrationPage.css'
+import { backendUrl } from "../../url"
 
 export default function RegistrationPage() {
 
@@ -56,7 +57,7 @@ export default function RegistrationPage() {
 
     async function handleSubmit(element: React.FormEvent<HTMLFormElement>) {
         element.preventDefault()
-        let response = await fetch('http://127.0.0.1:8000/api/v1/user/', {
+        let response = await fetch(`${backendUrl}api/v1/user/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'

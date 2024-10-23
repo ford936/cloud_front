@@ -15,3 +15,8 @@ export interface IProps {
 export interface IPropsList {
     data: IDescription[]
 }
+
+export interface SendChangeForm {
+    name: string,
+    description: string
+}
