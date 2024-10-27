@@ -47,7 +47,7 @@ export default function RegistrationPage() {
         }
 
         if (name == 'password') {
-            const isValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(value);
+            const isValid = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{6,}$/.test(value);
             if (isValid) {
                 setValidationPassword('');
               } else {

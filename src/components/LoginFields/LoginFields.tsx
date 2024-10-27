@@ -1,4 +1,4 @@
-import './LoginFileds.css'
+import './LoginFields.css'
 import { useState } from 'react'
 import { AuthForm } from './type'
 import { Link, useNavigate } from 'react-router-dom'

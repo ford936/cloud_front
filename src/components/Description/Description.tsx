@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { fetchGet } from '../_rtk/slices/filesSlice'
 import { backendUrl } from "../../url"
+import { jwtDecode } from "jwt-decode"
 
 
 export default function Description({data}: IProps) {
   let [edit, setEdit] = useState(false)
   const dispatch = useDispatch()
   let token = "Bearer " + String(localStorage.getItem('token'))
+  let decodeToken = jwtDecode(localStorage.getItem('token'))
   let unloadDate  = new Date(data.unload_date)
   let fileUrl = String(data.file)
   let lastLoadDate
@@ -55,12 +57,17 @@ export default function Description({data}: IProps) {
     }
   }
 
-  async function handleGetShareLink(element: BaseSyntheticEvent) {
-    let response = await (await fetch(`${backendUrl}anonym_link/${data.id}`, {headers: {"Authorization": token}})).json()
-    console.log(response)
-    navigator.clipboard.writeText(`${backendUrl}media/cloud/${response.link}`)
-    alert('Ссылка скопирована')
-  }
+  async function handleGetShareLink(element) {
+    let response = await (await fetch(`${backendUrl}anonym_link/${data.id}`, { headers: { "Authorization": token } })).json();
+    console.log(response);
+    try {
+        navigator.clipboard.writeText(`${backendUrl}media/cloud/${response.link}`);
+        alert(`Ссылка скопирована ${backendUrl}media/cloud/${response.link}`);
+    }
+    catch {
+        alert(`Ссылка скопирована ${backendUrl}media/cloud/${response.link}`);
+    }
+}
 
   async function handleEdit(element: BaseSyntheticEvent) {
     setEdit((old_state => !old_state))
@@ -82,7 +89,6 @@ export default function Description({data}: IProps) {
     dispatch(fetchGet())
     setEdit(false)
   }
-
 
   const edit_off = (
     <div className="description_container">
@@ -110,10 +116,39 @@ export default function Description({data}: IProps) {
     <button onClick={handleDeleteFile}>X</button>
 </div>
   )
+
+  const edit_off_admin = (
+    <div className="description_container">
+        <button onClick={handleEdit}>Edit</button>
+        <span className="description_container_subtitle"><b>Author:</b>{data.created_by.username}</span>
+        <span className="description_container_subtitle"><b>Name:</b><a onClick={handleOpenFile} className="description_container_file_name">{data.name}</a></span>
+        <span className="description_container_subtitle"><b>Comment:</b>{data.description}</span>
+        <span className="description_container_subtitle"><b>Size:</b>{data.size}</span>
+        <span className="description_container_subtitle"><b>Unload date:</b>{`${unloadDate.getDay()}.${unloadDate.getDate()}.${unloadDate.getFullYear()}`}</span>
+        <span className="description_container_subtitle"><b>Last load date:</b>{lastLoadDate}</span>
+        <button className="description_container_share" onClick={handleGetShareLink}>Share</button>
+        <button onClick={handleDeleteFile}>X</button>
+    </div>
+  )
+
+  const edit_on_admin = (
+    <div className="description_container">
+    <button onClick={handleEdit}>Cancel</button>
+    <span className="description_container_subtitle"><b>Name:</b><input onChange={handleInputChange} type="text" name="name" value={form.name}/></span>
+    <span className="description_container_subtitle"><b>Comment:</b><input onChange={handleInputChange} type="text" name="description" value={form.description}/></span>
+    <button onClick={handleSave}>Save</button>
+    <span className="description_container_subtitle"><b>Size:</b>{data.size}</span>
+    <span className="description_container_subtitle"><b>Unload date:</b>{`${unloadDate.getDay()}.${unloadDate.getDate()}.${unloadDate.getFullYear()}`}</span>
+    <span className="description_container_subtitle"><b>Last load date:</b>{lastLoadDate}</span>
+    <button className="description_container_share" onClick={handleGetShareLink}>Share</button>
+    <button onClick={handleDeleteFile}>X</button>
+</div>
+  )
  
   return (
     <>
-      {edit ? edit_on : edit_off}
+      {decodeToken.is_staff ? edit ? edit_on_admin : edit_off_admin : edit ? edit_on : edit_off}
+      {/* {edit ? edit_on : edit_off} */}
     </>
   )
   }

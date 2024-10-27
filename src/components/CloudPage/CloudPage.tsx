@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchGet } from '../_rtk/slices/filesSlice'
 import { jwtDecode } from "jwt-decode";
 import {backendUrl} from '../../url'
+import { select } from 'redux-saga/effects'
 
 
 
@@ -20,6 +21,7 @@ export default function CloudPage() {
     //     description: ''
     //   })
     const [file, setFile] = useState('')
+    const [users, setUsers] = useState('')
     const [description, setDescription] = useState('')
     // const jwtToken = localStorage.getItem('token')
     let token = jwtDecode(localStorage.getItem('token'))
@@ -72,7 +74,8 @@ export default function CloudPage() {
             body: formdata,
             redirect: 'follow'
         })
-        console.log(formdata)
+        setFile('')
+        setDescription('')
         if (response.ok) {
             dispatch(fetchGet())
         }
