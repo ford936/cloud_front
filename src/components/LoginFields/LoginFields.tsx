@@ -2,6 +2,7 @@ import './LoginFields.css'
 import { useState } from 'react'
 import { AuthForm } from './type'
 import { Link, useNavigate } from 'react-router-dom'
+import { backendUrl } from '../../url'
 
 export default function LoginFields() {
     const [form, setForm] = useState<AuthForm>({
@@ -41,7 +42,7 @@ export default function LoginFields() {
 
     async function handleSubmit(element: React.FormEvent<HTMLFormElement>) {
         element.preventDefault()
-        let response = await fetch('http://127.0.0.1:8000/api/token/', {
+        let response = await fetch('${backendUrl}api/token/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
