@@ -42,7 +42,7 @@ export default function LoginFields() {
 
     async function handleSubmit(element: React.FormEvent<HTMLFormElement>) {
         element.preventDefault()
-        let response = await fetch('${backendUrl}api/token/', {
+        let response = await fetch(`${backendUrl}api/token/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json;charset=utf-8'
